@@ -53,5 +53,52 @@ int main() {
     return 0;
 }
 
+//new code
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-Ith ayalo
+#define TOTAL_FRAMES 10
+#define WINDOW_SIZE 4
+
+int total_sent = 0;
+int base = 1; // Starting frame number (1-indexed for display)
+
+void transmission() {
+    while (base <= TOTAL_FRAMES) {
+        int ack_count = 0;
+
+        // Sending frames in the current window
+        for (int i = base; i < base + WINDOW_SIZE && i <= TOTAL_FRAMES; i++) {
+            printf("Sending frame %d...\n", i);
+            total_sent++;
+        }
+
+        // Receiving acknowledgments for frames
+        for (int i = base; i < base + WINDOW_SIZE && i <= TOTAL_FRAMES; i++) {
+            int lost = rand() % 2;  // 0: ack received, 1: ack lost
+            if (lost == 0) {
+                printf("Acknowledgment for frame %d received.\n", i);
+                ack_count++;
+            } else {
+                printf("Timeout! Frame %d acknowledgment lost.\n", i);
+                printf("Retransmitting window...\n");
+                break;
+            }
+        }
+
+        printf("\n");
+        base += ack_count; // Slide the window by number of frames acknowledged
+    }
+}
+
+int main() {
+    srand(time(NULL));
+
+    transmission();
+
+    printf("Total number of frames sent (including retransmissions): %d\n", total_sent);
+
+    return 0;
+}
+
