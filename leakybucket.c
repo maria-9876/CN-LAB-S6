@@ -24,7 +24,13 @@ void main()
             bucket=bsize;     //bucket full
             
         }
-        bucket=bucket-out;
+        
+        if (bucket < out)
+            bucket = 0;
+        else
+           bucket=bucket-out;
+
+        
         printf("bucket status:%d out of %d\n",bucket,bsize);
         n--;
     }
